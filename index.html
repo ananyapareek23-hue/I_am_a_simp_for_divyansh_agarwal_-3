@@ -7,11 +7,11 @@
   <style>
     * {
       box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
-      padding: 0;
       font-family: 'Arial', sans-serif;
       background: radial-gradient(circle at top, #1a0000, #000);
       color: white;
@@ -20,12 +20,12 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 20px;
     }
 
     .container {
       max-width: 900px;
-      width: 90%;
-      padding: 20px;
+      width: 100%;
     }
 
     .box {
@@ -35,6 +35,7 @@
       box-shadow: 0 0 40px rgba(255,0,0,0.5);
       margin: 20px 0;
       animation: fadeIn 0.5s ease-in;
+      text-align: center;
     }
 
     @keyframes fadeIn {
@@ -49,15 +50,18 @@
     h2 {
       color: #ff4d4d;
       margin-bottom: 20px;
+      font-size: 28px;
     }
 
     h3 {
       color: #ff4d4d;
+      margin: 20px 0;
     }
 
     p {
       line-height: 1.6;
       margin-bottom: 20px;
+      font-size: 18px;
     }
 
     button {
@@ -72,11 +76,18 @@
       color: white;
       transition: all 0.3s ease;
       box-shadow: 0 4px 15px rgba(255,77,77,0.4);
+      text-transform: uppercase;
     }
 
     button:hover {
       transform: translateY(-2px);
       box-shadow: 0 6px 20px rgba(255,77,77,0.6);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
     }
 
     img {
@@ -86,23 +97,24 @@
       border-radius: 15px;
       margin: 20px 0;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      display: block;
     }
 
-    /* Sudoku Styles */
+    /* SUDOKU */
     .sudoku-container {
-      margin: 30px 0;
+      margin: 30px auto;
     }
 
     .sudoku-grid {
       display: inline-grid;
-      grid-template-columns: repeat(9, 50px);
+      grid-template-columns: repeat(9, 1fr);
       grid-template-rows: repeat(9, 50px);
       gap: 1px;
       background: #333;
       padding: 5px;
       border-radius: 10px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-      margin: 20px auto;
+      max-width: 500px;
     }
 
     .sudoku-cell {
@@ -126,37 +138,47 @@
       font-weight: bold;
       text-align: center;
       outline: none;
-      padding: 5px;
     }
 
     .sudoku-cell.fixed {
       color: white;
-      background: rgba(255,77,77,0.3);
+      background: rgba(255,77,77,0.4);
     }
 
     .sudoku-cell.fixed input {
       display: none;
     }
 
-    /* 3x3 box borders */
+    /* 3x3 Grid Lines */
     .sudoku-cell:nth-child(3n) {
-      border-right-width: 3px;
+      border-right-width: 4px;
       border-right-color: #ff4d4d;
     }
-
     .sudoku-cell:nth-child(n+19):nth-child(-n+27),
-    .sudoku-cell:nth-child(n+46):nth-child(-n+54) {
-      border-bottom-width: 3px;
+    .sudoku-cell:nth-child(n+46):nth-child(-n+54),
+    .sudoku-cell:nth-child(n+73):nth-child(-n+81) {
+      border-bottom-width: 4px;
       border-bottom-color: #ff4d4d;
     }
 
-    /* Letter Styles */
+    .error {
+      background: rgba(255,0,0,0.3) !important;
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* LETTER */
     .letter-box {
       background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
       padding: 40px;
       border-radius: 20px;
       color: #2b2b2b;
-      font-family: 'Georgia', 'Brush Script MT', cursive;
+      font-family: 'Georgia', cursive;
       text-align: left;
       max-height: 500px;
       overflow-y: auto;
@@ -164,6 +186,7 @@
       line-height: 1.8;
       box-shadow: 0 15px 40px rgba(0,0,0,0.5);
       animation: glow 2s ease-in-out infinite alternate;
+      margin: 20px 0;
     }
 
     @keyframes glow {
@@ -171,37 +194,19 @@
       to { box-shadow: 0 15px 50px rgba(255,77,77,0.5); }
     }
 
-    /* Responsive */
     @media (max-width: 768px) {
       .sudoku-grid {
-        grid-template-columns: repeat(9, 40px);
-        grid-template-rows: repeat(9, 40px);
+        grid-template-rows: repeat(9, 45px);
       }
-      
-      .sudoku-cell {
+      .sudoku-cell, .sudoku-cell input {
         font-size: 18px;
       }
-      
       img {
         height: 200px;
       }
-      
       .box {
         padding: 30px 20px;
       }
-    }
-
-    /* Success message */
-    .success {
-      color: #4dff4d !important;
-      font-size: 24px;
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
     }
   </style>
 </head>
@@ -211,11 +216,11 @@
   </audio>
 
   <div class="container">
-    <!-- START SCREEN -->
+    <!-- START -->
     <div class="box" id="start">
       <h2>Before You Begin ❤️</h2>
       <p>One small question first.</p>
-      <p><b>Who matters the most to me?</b></p>
+      <p style="font-size: 24px;"><b>Who matters the most to me?</b></p>
       <button onclick="startGame()">You</button>
       <button onclick="wrongAnswer()">Anyone else</button>
     </div>
@@ -251,7 +256,7 @@
 
     <div class="box hidden" id="ep5">
       <h2>Episode 5</h2>
-      <img src="photo5.JPG" alt="Episode 5" onerror="this.style.style.display='none'">
+      <img src="photo5.JPG" alt="Episode 5" onerror="this.style.display='none'">
       <p>For the first time, I knew we were equally madly in love.</p>
       <button onclick="nextEpisode(5)">Next</button>
     </div>
@@ -277,7 +282,7 @@
       <button onclick="nextEpisode(8)">Solve Sudoku</button>
     </div>
 
-    <!-- SUDOKU PUZZLE - COMPLETE 9x9 GRID -->
+    <!-- SUDOKU -->
     <div class="box hidden" id="sudoku">
       <h2>Solve This Sudoku To Unlock ❤️</h2>
       <p>Fill in the missing numbers (1-9) to complete the puzzle!</p>
@@ -285,36 +290,166 @@
       <div class="sudoku-container">
         <div class="sudoku-grid" id="sudokuGrid">
           <!-- Row 1 -->
-          <div class="sudoku-cell fixed">8</div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="1"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="2"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="3"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="4"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="5"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="6"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="7"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="8"></div>
-
+          <div class="sudoku-cell fixed">8</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="1"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="2"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="3"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="4"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="5"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="6"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="7"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="0" data-col="8"></div>
+          
           <!-- Row 2 -->
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="0"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="1"></div>
-          <div class="sudoku-cell fixed">3</div>
-          <div class="sudoku-cell fixed">6</div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="4"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="5"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="6"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="7"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="8"></div>
-
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="0"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="1"></div><div class="sudoku-cell fixed">3</div><div class="sudoku-cell fixed">6</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="4"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="5"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="6"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="7"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="1" data-col="8"></div>
+          
           <!-- Row 3 -->
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="0"></div>
-          <div class="sudoku-cell fixed">7</div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="2"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="3"></div>
-          <div class="sudoku-cell fixed">9</div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="5"></div>
-          <div class="sudoku-cell fixed">2</div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="7"></div>
-          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="8"></div>
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="0"></div><div class="sudoku-cell fixed">7</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="2"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="3"></div><div class="sudoku-cell fixed">9</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="5"></div><div class="sudoku-cell fixed">2</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="7"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="2" data-col="8"></div>
+          
+          <!-- Row 4 -->
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="3" data-col="0"></div><div class="sudoku-cell fixed">5</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="3" data-col="2"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="3" data-col="3"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="3" data-col="4"></div><div class="sudoku-cell fixed">7</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="3" data-col="6"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="3" data-col="7"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="3" data-col="8"></div>
+          
+          <!-- Row 5 -->
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="4" data-col="0"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="4" data-col="1"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="4" data-col="2"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="4" data-col="3"></div><div class="sudoku-cell fixed">4</div><div class="sudoku-cell fixed">5</div><div class="sudoku-cell fixed">7</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="4" data-col="7"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="4" data-col="8"></div>
+          
+          <!-- Row 6 -->
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="5" data-col="0"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="5" data-col="1"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="5" data-col="2"></div><div class="sudoku-cell fixed">1</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="5" data-col="4"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="5" data-col="5"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="5" data-col="6"></div><div class="sudoku-cell fixed">3</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="5" data-col="8"></div>
+          
+          <!-- Row 7 -->
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="6" data-col="0"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="6" data-col="1"></div><div class="sudoku-cell fixed">1</div><div class="sudoku-cell fixed">2</div><div class="sudoku-cell fixed">5</div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="6" data-col="5"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="6" data-col="6"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="6" data-col="7"></div><div class="sudoku-cell fixed">6</div>
+          
+          <!-- Row 8 -->
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="0"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="1"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="2"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="3"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="4"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="5"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="6"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="7" data-col="7"></div><div class="sudoku-cell fixed">9</div>
+          
+          <!-- Row 9 -->
+          <div class="sudoku-cell"><input type="text" maxlength="1" data-row="8" data-col="0"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="8" data-col="1"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="8" data-col="2"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="8" data-col="3"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="8" data-col="4"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="8" data-col="5"></div><div class="sudoku-cell"><input type="text" maxlength="1" data-row="8" data-col="6"></div><div class="sudoku-cell fixed">7</div><div class="sudoku-cell fixed">8</div>
+        </div>
+      </div>
+      <button id="checkBtn" onclick="checkSudoku()">Unlock Letter</button>
+      <p id="sudokuStatus" style="color: #ff4d4d; font-weight: bold;"></p>
+    </div>
 
-          <!-- Row 4
+    <!-- LETTER -->
+    <div class="box hidden" id="letter">
+      <h2>For You ❤️</h2>
+      <div class="letter-box">
+        It really means a lot to me. I still can't stop crying. You know the fest I went to yesterday? It's known for good-looking people from SCMS, especially guys. I met so many, but honestly no one comes close to you. Every other guy just feels like a fuckboy, a creep, or just a friend who should know his boundaries and treat me like a sister. The moment I get even a slight off vibe, I cut them off. You're the only guy who truly matters to me.<br><br>
+
+        You're my biggest flex. I can't stop talking about you. I know log nazar laga sakte, but whenever I meet a stranger, I somehow bring your name into the conversation. When I say you're hot, I really mean it. Please trust me and never question it. I've never fantasised about any guy, real life or celebrity, the way I do about you. When I look at you, into your eyes, your perfectly carved face, that chiselled jawline, those pretty eyes that shine and glow, I can literally cry if I stare too long. They're magical. You calm me down. Your voice is the most relaxing sound to me. I have your "I love you" voice notes saved and I listen to them when I miss you.<br><br>
+
+        You are my calm, my safe place, the person I'm most comfortable with. You get me like no one else. I love myself more when I'm with you. You teach me so much about love unknowingly. You complete me, meri jaan. I'm scared of losing you. If I ever hurt you unknowingly, show me your anger or disappointment, but don't stop believing in us. I'll do anything to make it right. Please never leave me. I can't live without you.<br><br>
+
+        What you did for me yesterday means more than I can explain. It made me feel chosen, loved, and worthy. I used to think I didn't deserve this kind of love, but you proved me wrong. You healed me in so many ways. With you, I feel like a princess. You're the first person who made me feel like a girl. If true love exists, it's ours. No one can love me the way you do.<br><br>
+
+        <b>I LOVE YOU DIVYANSH. I LOVE YOU MERI JAAN. I LOVE YOU SOOOOOO MUCH.</b> My heart is still beating so fast for you. It's crazy how much I love you. More than what I wrote, I don't have words to explain. Please never question my love for you. I promise it will never fade. NEVER.<br><br>
+
+        I love you.
+      </div>
+      <button onclick="goToFinal()">Continue</button>
+    </div>
+
+    <!-- FINAL -->
+    <div class="box hidden" id="final">
+      <h2>This Is Me Asking You</h2>
+      <h3>Will you be my Valentine? 💕</h3>
+      <button onclick="yesAnswer()">Yes ❤️</button>
+      <button onclick="fuckYesAnswer()">Fuck YES ❤️❤️❤️</button>
+    </div>
+  </div>
+
+  <script>
+    // SOLUTION GRID
+    const SOLUTION = [
+      [8,1,2,5,3,4,6,9,7],
+      [5,9,3,6,7,2,4,8,1],
+      [4,7,6,8,9,1,2,5,3],
+      [1,5,9,3,2,7,8,6,4],
+      [3,6,8,9,4,5,7,1,2],
+      [2,4,7,1,8,6,9,3,5],
+      [7,8,1,2,5,9,3,4,6],
+      [6,3,4,7,1,8,5,2,9],
+      [9,2,5,4,6,3,1,7,8]
+    ];
+
+    function startGame() {
+      document.getElementById('start').classList.add('hidden');
+      document.getElementById('ep1').classList.remove('hidden');
+      document.getElementById('bgm').play().catch(() => {});
+    }
+
+    function wrongAnswer() {
+      alert('Wrong answer! 😜 Try again.');
+    }
+
+    function nextEpisode(n) {
+      document.getElementById('ep'+n).classList.add('hidden');
+      if (n < 8) {
+        document.getElementById('ep'+(n+1)).classList.remove('hidden');
+      } else {
+        document.getElementById('sudoku').classList.remove('hidden');
+      }
+    }
+
+    function checkSudoku() {
+      const inputs = document.querySelectorAll('#sudokuGrid input');
+      let correct = true;
+      let empty = false;
+
+      inputs.forEach(input => {
+        const row = parseInt(input.dataset.row);
+        const col = parseInt(input.dataset.col);
+        const val = input.value;
+        
+        if (val === '') {
+          empty = true;
+          return;
+        }
+        
+        if (parseInt(val) !== SOLUTION[row][col]) {
+          correct = false;
+          input.parentElement.classList.add('error');
+          setTimeout(() => input.parentElement.classList.remove('error'), 1000);
+        }
+      });
+
+      const status = document.getElementById('sudokuStatus');
+      
+      if (empty) {
+        status.textContent = 'Please fill all empty cells first! ❤️';
+        status.style.color = '#ff4d4d';
+      } else if (!correct) {
+        status.textContent = 'Not quite right! Try again. 💪';
+        status.style.color = '#ff4d4d';
+      } else {
+        status.textContent = 'Perfect! Letter Unlocked! ✨';
+        status.style.color = '#4dff4d';
+        document.getElementById('checkBtn').style.display = 'none';
+        setTimeout(() => {
+          document.getElementById('sudoku').classList.add('hidden');
+          document.getElementById('letter').classList.remove('hidden');
+        }, 1500);
+      }
+    }
+
+    function goToFinal() {
+      document.getElementById('letter').classList.add('hidden');
+      document.getElementById('final').classList.remove('hidden');
+    }
+
+    function yesAnswer() {
+      alert('❤️ I knew it. I love you! 💕');
+    }
+
+    function fuckYesAnswer() {
+      alert('❤️❤️❤️ FUCK YES! I LOVE YOU FOREVER! 💕💕💕');
+    }
+
+    // Auto-focus inputs
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('#sudokuGrid input').forEach((input, index) => {
+        input.addEventListener('input', (e) => {
+          if (e.target.value && e.target.value > 9) e.target.value = '';
+          document.querySelectorAll('#sudokuGrid input').forEach(cell => cell.parentElement.classList.remove('error'));
+          document.getElementById('sudokuStatus').textContent = '';
+        });
+        
+        input.addEventListener('keypress', (e) => {
+          if (!/[1-9]/.test(e.key)) e.preventDefault();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
