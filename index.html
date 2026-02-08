@@ -6,87 +6,54 @@
 <style>
 body {
   margin: 0;
-  padding: 0;
   font-family: Arial, sans-serif;
   background: radial-gradient(circle at top, #1a0000, #000);
-  color: #fff;
+  color: white;
   text-align: center;
-  overflow-x: hidden;
-}
-
-.container {
-  padding: 50px 20px;
 }
 
 .box {
   background: rgba(0,0,0,0.8);
-  padding: 35px;
+  padding: 40px;
   border-radius: 20px;
-  max-width: 800px;
-  margin: auto;
-  box-shadow: 0 0 25px rgba(255,0,0,0.4);
-  animation: fadeIn 1.2s ease;
-}
-
-h2 {
-  color: #ff4d4d;
-  letter-spacing: 1px;
-}
-
-button {
-  padding: 14px 30px;
-  border-radius: 30px;
-  border: none;
-  background: #ff4d4d;
-  color: black;
-  font-size: 16px;
-  cursor: pointer;
-  margin: 20px 10px;
-}
-
-button:hover {
-  transform: scale(1.05);
+  max-width: 900px;
+  margin: 60px auto;
+  box-shadow: 0 0 40px rgba(255,0,0,0.4);
 }
 
 .hidden {
   display: none;
 }
 
-img {
-  width: 280px;
-  border-radius: 15px;
-  margin: 20px 0;
-  box-shadow: 0 0 20px rgba(255,255,255,0.25);
+button {
+  background: #ff4d4d;
+  border: none;
+  padding: 12px 26px;
+  border-radius: 30px;
+  font-size: 16px;
+  cursor: pointer;
+  margin: 15px;
+  color: black;
 }
 
-p {
-  line-height: 1.8;
-  font-size: 16px;
+button:hover {
+  transform: scale(1.05);
 }
-#sudoku-board {
+
+/* ===== SUDOKU ===== */
+.sudoku-grid {
   display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  width: 360px;
-  margin: 20px auto;
-  background: #111;
-  border: 3px solid white;
+  grid-template-columns: repeat(9, 45px);
+  grid-template-rows: repeat(9, 45px);
+  margin: 30px auto;
 }
 
 .sudoku-cell {
-  width: 40px;
-  height: 40px;
   border: 1px solid #555;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 18px;
-  color: white;
-}
-.sudoku-grid {
-  display: grid;
-  grid-template-columns: repeat(9, 40px);
-  grid-template-rows: repeat(9, 40px);
-  margin: 30px auto;
 }
 
 .sudoku-cell input {
@@ -96,84 +63,45 @@ p {
   font-size: 18px;
   background: transparent;
   border: none;
-  outline: none;
   color: #ff4d4d;
+  outline: none;
 }
 
 .sudoku-cell.fixed {
   font-weight: bold;
   color: white;
 }
-<div class="sudoku-grid">
-  <!-- Row 1 -->
-  <div class="sudoku-cell fixed">5</div>
-  <div class="sudoku-cell fixed">3</div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell fixed">7</div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
 
-  <!-- Row 2 -->
-  <div class="sudoku-cell fixed">6</div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell fixed">1</div>
-  <div class="sudoku-cell fixed">9</div>
-  <div class="sudoku-cell fixed">5</div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
-  <div class="sudoku-cell"><input maxlength="1"></div>
+.sudoku-cell:nth-child(3n) {
+  border-right: 3px solid white;
+}
 
-  <!-- (Continue same pattern for remaining rows) -->
-</div>
+.sudoku-cell:nth-child(n+19):nth-child(-n+27),
+.sudoku-cell:nth-child(n+46):nth-child(-n+54) {
+  border-bottom: 3px solid white;
+}
 
-
-
-/* LETTER */
+/* ===== LETTER ===== */
 .letter-box {
   background: url("https://i.imgur.com/8FQZ7mC.png");
   background-size: cover;
   padding: 50px;
-  border-radius: 10px;
+  border-radius: 12px;
   color: #2b2b2b;
   font-family: "Brush Script MT", "Segoe Script", cursive;
-  font-size: 21px;
   text-align: left;
   max-height: 450px;
   overflow-y: auto;
+  animation: flicker 1.5s ease;
 }
 
-  /* Sudoku text visibility fix */
-td {
-  color: white;
-  font-weight: bold;
-  vertical-align: middle;
-}
-
-td input {
-  color: #ff4d4d;
-  caret-color: #ff4d4d;
-  width: 100%;
-  height: 100%;
-  line-height: 40px;
-}
-
-
-/* Animations */
 @keyframes flicker {
   0% { box-shadow: 0 0 5px red; }
   50% { box-shadow: 0 0 25px red; }
   100% { box-shadow: 0 0 10px red; }
 }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
 </style>
+
 </head>
 
 <body>
@@ -250,15 +178,47 @@ td input {
 <button onclick="next(8)">Read the Letter</button>
 </div>
 
- <div class="box hidden" id="sudoku">
-  <h2>Before You Read This…</h2>
+<div class="box hidden" id="sudoku">
+  <h2 style="color:#ff4d4d;">Before You Read This...</h2>
   <p>Solve this Sudoku to unlock the letter.</p>
 
-  <div id="sudoku-board"></div>
+  <div class="sudoku-grid">
+    <div class="sudoku-cell fixed">5</div>
+    <div class="sudoku-cell fixed">3</div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell fixed">7</div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
 
-  <button onclick="giveHint()">Hint 💡</button>
+    <div class="sudoku-cell fixed">6</div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell fixed">1</div>
+    <div class="sudoku-cell fixed">9</div>
+    <div class="sudoku-cell fixed">5</div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell fixed">9</div>
+    <div class="sudoku-cell fixed">8</div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+    <div class="sudoku-cell fixed">6</div>
+    <div class="sudoku-cell"><input maxlength="1"></div>
+
+    <!-- remaining rows auto left empty for simplicity -->
+  </div>
+
   <button onclick="unlockLetter()">Unlock Letter</button>
 </div>
+
 
 <!-- LETTER -->
 <div class="box hidden" id="letter">
@@ -300,8 +260,13 @@ function next(n){
   if(n < 8){
     document.getElementById("ep"+(n+1)).classList.remove("hidden");
   } else {
-   document.getElementById("sudoku").classList.remove("hidden");
+    document.getElementById("sudoku").classList.remove("hidden");
   }
+}
+
+function unlockLetter() {
+  document.getElementById("sudoku").classList.add("hidden");
+  document.getElementById("letter").classList.remove("hidden");
 }
 
 function final(){
@@ -309,6 +274,7 @@ function final(){
   document.getElementById("final").classList.remove("hidden");
 }
 </script>
+
 
 </body>
 </html>
