@@ -166,6 +166,28 @@ p {
 <button onclick="next(8)">Read the Letter</button>
 </div>
 
+  <div class="box hidden" id="sudoku">
+  <h2>Before You Read This…</h2>
+  <p>Solve this Sudoku to unlock the letter.</p>
+  <p>Fill numbers 1–9 so each row, column, and box has no repeats.</p>
+
+  <table style="margin:auto; border-collapse:collapse;">
+    <tr><td>5</td><td>3</td><td><input></td><td>6</td><td><input></td><td><input></td><td><input></td><td>9</td><td>8</td></tr>
+    <tr><td><input></td><td>7</td><td><input></td><td>1</td><td>9</td><td>5</td><td><input></td><td><input></td><td><input></td></tr>
+    <tr><td><input></td><td><input></td><td>8</td><td><input></td><td><input></td><td><input></td><td><input></td><td>6</td><td><input></td></tr>
+
+    <tr><td>8</td><td><input></td><td><input></td><td><input></td><td>6</td><td><input></td><td><input></td><td><input></td><td>3</td></tr>
+    <tr><td>4</td><td><input></td><td><input></td><td>8</td><td><input></td><td>3</td><td><input></td><td><input></td><td>1</td></tr>
+    <tr><td>7</td><td><input></td><td><input></td><td><input></td><td>2</td><td><input></td><td><input></td><td><input></td><td>6</td></tr>
+
+    <tr><td><input></td><td>6</td><td><input></td><td><input></td><td><input></td><td><input></td><td>2</td><td><input></td><td><input></td></tr>
+    <tr><td><input></td><td><input></td><td><input></td><td>4</td><td>1</td><td>9</td><td><input></td><td>8</td><td><input></td></tr>
+    <tr><td>2</td><td>8</td><td><input></td><td><input></td><td><input></td><td>5</td><td><input></td><td>7</td><td>9</td></tr>
+  </table>
+
+  <button onclick="unlockLetter()">Unlock Letter</button>
+</div>
+
 <!-- LETTER -->
 <div class="box hidden" id="letter">
 <h2>For You</h2>
@@ -206,7 +228,7 @@ function next(n){
   if(n < 8){
     document.getElementById("ep"+(n+1)).classList.remove("hidden");
   } else {
-    document.getElementById("letter").classList.remove("hidden");
+   document.getElementById("sudoku").classList.remove("hidden");
   }
 }
 
